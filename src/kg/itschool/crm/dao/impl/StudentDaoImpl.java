@@ -4,6 +4,7 @@ import kg.itschool.crm.dao.StudentDao;
 import kg.itschool.crm.model.Student;
 
 import java.sql.*;
+import java.util.List;
 
 public class StudentDaoImpl implements StudentDao {
 
@@ -139,7 +140,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public Student[] findAll() {
-        return new Student[0];
+    public List<Student> findAll() {
+        return null;
     }
 }

@@ -9,6 +9,7 @@ import kg.itschool.crm.model.Mentor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 public class Main {
@@ -16,29 +17,33 @@ public class Main {
     public static void main(String[] args) {
         ManagerDao managerDao = (ManagerDao) DaoContext.autowired("ManagerDao", "singleton");
 
-//        Manager managers = managerDao.findAll();
-//
-//        for (Manager manager : managers) {
+
+//        for (Manager manager : managerDao.findAll()) {
 //            System.out.println(manager);
 //        }
 
-        Random random = new Random();
+        Iterator iterator = managerDao.findAll().iterator();
+         while (iterator.hasNext()){
+             System.out.println(iterator.next());
+         }
 
-        int length = 15;
+//        Random random = new Random();
+//
+//        int length = 15;
+//
+//        ArrayList<Integer> arrayList = new ArrayList<>();
+//
+//        arrayList.add(12);
+//        arrayList.add(13);
+//        arrayList.add(123);
+//        arrayList.add(12344);
+//
+//        Iterator iterator = arrayList.iterator();
+//         while (iterator.hasNext()){
+//             System.out.println(iterator.next());
+//         }
 
-        ArrayList<Integer> arrayList = new ArrayList<>();
 
-        for (int i = 0; i < length ; i++) {
-            arrayList.add(random.nextInt());
-        }
-
-        for (int i = 0; i < 10; i++) {
-            arrayList.remove(20);
-        }
-
-        arrayList.trimToSize();
-
-        System.out.println(arrayList.size());
 
     }
 }

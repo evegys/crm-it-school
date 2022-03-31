@@ -4,6 +4,7 @@ import kg.itschool.crm.dao.MentorDao;
 import kg.itschool.crm.model.Mentor;
 
 import java.sql.*;
+import java.util.List;
 
 public class MentorDaoImpl implements MentorDao {
 
@@ -144,7 +145,7 @@ public class MentorDaoImpl implements MentorDao {
     }
 
     @Override
-    public Mentor[] findAll() {
-        return new Mentor[0];
+    public List<Mentor> findAll() {
+        return null;
     }
 }

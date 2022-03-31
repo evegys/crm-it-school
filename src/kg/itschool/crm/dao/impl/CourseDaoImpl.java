@@ -5,6 +5,7 @@ import kg.itschool.crm.model.Course;
 import kg.itschool.crm.model.CourseFormat;
 
 import java.sql.*;
+import java.util.List;
 
 public class CourseDaoImpl implements CourseDao {
 
@@ -149,7 +150,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public Course[] findAll() {
-        return new Course[0];
+    public List<Course> findAll() {
+        return null;
     }
 }

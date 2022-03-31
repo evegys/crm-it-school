@@ -5,6 +5,8 @@ import kg.itschool.crm.dao.daoutil.Log;
 import kg.itschool.crm.model.Manager;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerDaoImpl implements ManagerDao {
 
@@ -144,33 +146,24 @@ public class ManagerDaoImpl implements ManagerDao {
     }
 
     @Override
-    public Manager[] findAll() {
+    public List<Manager> findAll() {
         Connection connection = null;
-        Statement statement = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
-        Manager[] managers = null;
+        List<Manager> managers = new ArrayList<>();
 
         try {
             Log.info(this.getClass().getSimpleName() + " findAll()", Connection.class.getSimpleName(), "Establishing connection");
             connection = getConnection();
 
-            statement = connection.createStatement();
-
-            String countQuery = "SELECT COUNT(*) FROM tb_managers";
             String readQuery = "SELECT * FROM tb_managers;";
-
-            resultSet = statement.executeQuery(countQuery);
-            resultSet.next();
-
-            managers = new Manager[resultSet.getInt(1)];
 
             preparedStatement = connection.prepareStatement(readQuery);
 
             resultSet = preparedStatement.executeQuery();
 
-            for (int i = 0; i < managers.length && resultSet.next(); i++) {
+            for (int i = 0; i <= managers.size() && resultSet.next(); i++) {
                 Manager manager = new Manager();
                 manager.setId(resultSet.getLong("id"));
                 manager.setFirstName(resultSet.getString("first_name"));
@@ -180,7 +173,7 @@ public class ManagerDaoImpl implements ManagerDao {
                 manager.setSalary(Double.valueOf(resultSet.getString("salary").replaceAll("[^\\d\\.]", "")));
                 manager.setDob(resultSet.getDate("dob").toLocalDate());
                 manager.setDateCreated(resultSet.getTimestamp("date_created").toLocalDateTime());
-                managers[i] = manager;
+                managers.add(manager);
             }
             return managers;
         } catch (Exception e) {
@@ -188,7 +181,6 @@ public class ManagerDaoImpl implements ManagerDao {
             e.printStackTrace();
         } finally {
             close(resultSet);
-            close(statement);
             close(preparedStatement);
             close(connection);
         }

@@ -5,6 +5,7 @@ import kg.itschool.crm.model.Group;
 
 import java.sql.*;
 import java.time.LocalTime;
+import java.util.List;
 
 public class GroupDaoImpl implements GroupDao {
 
@@ -149,7 +150,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Group[] findAll() {
-        return new Group[0];
+    public List<Group> findAll() {
+        return null;
     }
 }

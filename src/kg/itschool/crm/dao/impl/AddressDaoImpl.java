@@ -5,6 +5,7 @@ import kg.itschool.crm.dao.daoutil.Log;
 import kg.itschool.crm.model.Address;
 
 import java.sql.*;
+import java.util.List;
 
 public class AddressDaoImpl implements AddressDao {
 
@@ -135,7 +136,7 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public Address[] findAll() {
-        return new Address[0];
+    public List<Address> findAll() {
+        return null;
     }
 }

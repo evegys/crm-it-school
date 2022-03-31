@@ -6,6 +6,7 @@ import kg.itschool.crm.model.CourseFormat;
 
 import java.sql.*;
 import java.time.LocalTime;
+import java.util.List;
 
 public class CourseFormatDaoImpl implements CourseFormatDao {
 
@@ -144,7 +145,7 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
     }
 
     @Override
-    public CourseFormat[] findAll() {
-        return new CourseFormat[0];
+    public List<CourseFormat> findAll() {
+        return null;
     }
 }
