@@ -1,60 +1,44 @@
 package kg.itschool.crm;
 
 import kg.itschool.crm.dao.ManagerDao;
-import kg.itschool.crm.dao.daoutil.DaoFactory;
-import kg.itschool.crm.model.Course;
-import kg.itschool.crm.model.CourseFormat;
+import kg.itschool.crm.dao.MentorDao;
+import kg.itschool.crm.dao.daoutil.DaoContext;
 import kg.itschool.crm.model.Manager;
+import kg.itschool.crm.model.Mentor;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Main {
 
     public static void main(String[] args) {
-        CourseFormat bootCampFormat = new CourseFormat();
-        bootCampFormat.setId(1L);
-        bootCampFormat.setFormat("BOOTCAMP");
-        bootCampFormat.setCourseDurationWeeks(12);
-        bootCampFormat.setLessonDuration(LocalTime.of(3,0));
-        bootCampFormat.setLessonsPerWeek(5);
-        bootCampFormat.setOnline(false);
+        ManagerDao managerDao = (ManagerDao) DaoContext.autowired("ManagerDao", "singleton");
 
-        CourseFormat ordinaryFormat = new CourseFormat();
-        ordinaryFormat.setId(2L);
-        ordinaryFormat.setFormat("ORDINARY");
-        ordinaryFormat.setLessonsPerWeek(3);
-        ordinaryFormat.setLessonDuration(LocalTime.of(1, 30));
-        ordinaryFormat.setCourseDurationWeeks(28);
-        ordinaryFormat.setOnline(true);
+//        Manager managers = managerDao.findAll();
+//
+//        for (Manager manager : managers) {
+//            System.out.println(manager);
+//        }
 
-        Course javaCourse = new Course();
-        javaCourse.setId(1L);
-        javaCourse.setName("Java");
-        javaCourse.setPrice(15000);
-        javaCourse.setCourseFormat(bootCampFormat);
+        Random random = new Random();
 
-        Course pythonCourse = new Course();
-        pythonCourse.setId(2L);
-        pythonCourse.setName("Python");
-        pythonCourse.setPrice(15000);
-        pythonCourse.setCourseFormat(bootCampFormat);
+        int length = 15;
 
-        Course jsCourse = new Course();
-        jsCourse.setId(3L);
-        jsCourse.setName("JavaScript");
-        jsCourse.setPrice(15000);
-        jsCourse.setCourseFormat(bootCampFormat);
+        ArrayList<Integer> arrayList = new ArrayList<>();
 
-        Course sqlCourse = new Course();
-        sqlCourse.setId(4L);
-        sqlCourse.setName("SQL");
-        sqlCourse.setPrice(10000);
-        sqlCourse.setCourseFormat(ordinaryFormat);
+        for (int i = 0; i < length ; i++) {
+            arrayList.add(random.nextInt());
+        }
 
-        System.out.println(javaCourse);
-        System.out.println(pythonCourse);
-        System.out.println(jsCourse);
-        System.out.println(sqlCourse);
+        for (int i = 0; i < 10; i++) {
+            arrayList.remove(20);
+        }
+
+        arrayList.trimToSize();
+
+        System.out.println(arrayList.size());
 
     }
 }

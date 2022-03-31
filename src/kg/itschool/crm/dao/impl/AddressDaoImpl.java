@@ -133,4 +133,9 @@ public class AddressDaoImpl implements AddressDao {
         }
         return address;
     }
+
+    @Override
+    public Address[] findAll() {
+        return new Address[0];
+    }
 }

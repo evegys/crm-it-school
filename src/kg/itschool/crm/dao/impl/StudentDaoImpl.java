@@ -137,4 +137,9 @@ public class StudentDaoImpl implements StudentDao {
         }
         return student;
     }
+
+    @Override
+    public Student[] findAll() {
+        return new Student[0];
+    }
 }

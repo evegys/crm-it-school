@@ -10,7 +10,7 @@ public final class Manager extends BaseEntity {
     private String phoneNumber;
     private String email;
     private LocalDate dob;
-    private Double salary;
+    private Double salary; // null
 
     public Manager() {
     }

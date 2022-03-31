@@ -147,4 +147,9 @@ public class GroupDaoImpl implements GroupDao {
         }
         return group;
     }
+
+    @Override
+    public Group[] findAll() {
+        return new Group[0];
+    }
 }

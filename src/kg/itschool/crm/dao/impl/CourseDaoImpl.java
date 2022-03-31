@@ -147,4 +147,9 @@ public class CourseDaoImpl implements CourseDao {
         }
         return course;
     }
+
+    @Override
+    public Course[] findAll() {
+        return new Course[0];
+    }
 }

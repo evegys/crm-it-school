@@ -1,5 +1,7 @@
 package kg.itschool.crm.dao;
 
+import kg.itschool.crm.dao.daoutil.Log;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 public interface CrudDao<Model> {
     Model save(Model model);
     Model findById(Long id);
+    Model[] findAll();
 
     default Connection getConnection() throws SQLException {
         final String URL = "jdbc:postgresql://localhost:5432/crm";
@@ -18,13 +21,11 @@ public interface CrudDao<Model> {
 
     default void close(AutoCloseable closeable) {
         try {
-            System.out.println(closeable.getClass().getSimpleName() + " closing...");
+            Log.info(this.getClass().getSimpleName(), closeable.getClass().getSimpleName(), "Closing connection");
             closeable.close();
-            System.out.println(closeable.getClass().getSimpleName() + " closed.");
         } catch (Exception e) {
-            System.out.println("Could not close " + closeable.getClass().getSimpleName());
+            Log.error(this.getClass().getSimpleName(), e.getStackTrace()[0].getClass().getSimpleName(), e.getMessage());
             e.printStackTrace();
         }
     }
-
 }

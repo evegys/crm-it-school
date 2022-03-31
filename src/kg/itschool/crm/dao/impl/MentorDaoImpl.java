@@ -142,4 +142,9 @@ public class MentorDaoImpl implements MentorDao {
         }
         return mentor;
     }
+
+    @Override
+    public Mentor[] findAll() {
+        return new Mentor[0];
+    }
 }
