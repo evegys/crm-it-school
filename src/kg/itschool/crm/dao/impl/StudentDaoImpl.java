@@ -9,6 +9,7 @@ import kg.itschool.crm.model.Student;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StudentDaoImpl implements StudentDao {
 
@@ -48,7 +49,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public Student save(Student student) {
+    public Optional<Student> save(Student student) {
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -99,12 +100,12 @@ public class StudentDaoImpl implements StudentDao {
             close(preparedStatement);
             close(connection);
         }
-        return savedStudent;
+        return Optional.of(savedStudent);
     }
 
 
     @Override
-    public Student findById(Long id) {
+    public Optional<Student> findById(Long id) {
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -140,7 +141,7 @@ public class StudentDaoImpl implements StudentDao {
             close(preparedStatement);
             close(connection);
         }
-        return student;
+        return Optional.of(student);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class StudentDaoImpl implements StudentDao {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-List <Student> students = new ArrayList<>();
+        List <Student> students = new ArrayList<>();
         List<Manager> managers = new ArrayList<>();
         List <Mentor> mentors = new ArrayList<>();
         try {
@@ -186,14 +187,42 @@ List <Student> students = new ArrayList<>();
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
-        return StudentDao.super.getConnection();
+    public List<Student> saveAll(List<Student> students) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Log.info(this.getClass().getSimpleName() , Connection.class.getSimpleName() , "Establishig connection");
+            connection = getConnection();
+
+
+            String insertQuery ="INSERT INTO tb_students(" +
+                    "first_name , last_name , email , phone_number , dob , date_created ) " +
+                    "VALUES (? , ? , ? , ? , ? , ?)";
+
+            for (int i = 0; i < students.size(); i++) {
+
+
+                preparedStatement = connection.prepareStatement(insertQuery);
+                preparedStatement.setString(1, String.valueOf(students.get(0)));
+                preparedStatement.setString(2, String.valueOf(students.get(1)));
+                preparedStatement.setString(3, String.valueOf(students.get(2)));
+                preparedStatement.setString(4, String.valueOf(students.get(3)));
+                preparedStatement.setDate(5, Date.valueOf(String.valueOf(students.get(4))));
+                preparedStatement.setTimestamp(6, Timestamp.valueOf(String.valueOf(students.get(5))));
+
+                preparedStatement.execute();
+
+            }
+            close(preparedStatement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            close(connection);
+        }
+
+
+        return null;
     }
-
-    @Override
-    public void close(AutoCloseable closeable) {
-        StudentDao.super.close(closeable);
-    }
-
-
 }
