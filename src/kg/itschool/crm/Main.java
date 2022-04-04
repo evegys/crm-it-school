@@ -1,49 +1,47 @@
 package kg.itschool.crm;
 
-import kg.itschool.crm.dao.ManagerDao;
-import kg.itschool.crm.dao.MentorDao;
-import kg.itschool.crm.dao.daoutil.DaoContext;
-import kg.itschool.crm.model.Manager;
-import kg.itschool.crm.model.Mentor;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        ManagerDao managerDao = (ManagerDao) DaoContext.autowired("ManagerDao", "singleton");
+        List<String> cities = new ArrayList<>();
 
+        cities.add("Bishkek");
+        cities.add("Osh");
+        cities.add("Naryn");
+        cities.add("Talassss");
+        cities.add("Djalal-Abad");
+//        System.out.println(cities);
 
-//        for (Manager manager : managerDao.findAll()) {
-//            System.out.println(manager);
-//        }
+        cities.add(0, "Tokmok");
+//        System.out.println(cities);
 
-        Iterator iterator = managerDao.findAll().iterator();
-         while (iterator.hasNext()){
-             System.out.println(iterator.next());
-         }
+        cities.add(2, "Karakol");
+//        System.out.println(cities);
 
-//        Random random = new Random();
-//
-//        int length = 15;
-//
-//        ArrayList<Integer> arrayList = new ArrayList<>();
-//
-//        arrayList.add(12);
-//        arrayList.add(13);
-//        arrayList.add(123);
-//        arrayList.add(12344);
-//
-//        Iterator iterator = arrayList.iterator();
-//         while (iterator.hasNext()){
-//             System.out.println(iterator.next());
-//         }
+        int talassssIndex = cities.indexOf("Talassss");
+        cities.set(talassssIndex, "Talas");
+        System.out.println(cities);
 
+        List<String> cities2 = new ArrayList<>();
+        cities2.add("Bishkek");
+        cities2.add("Osh");
+        cities2.add("Batken");
+        cities2.add("Kant");
+        cities2.add("Balykchy");
+        System.out.println(cities2);
 
+        List<String> union = new ArrayList<>(cities);
+        union.addAll(cities2);
+        System.out.println(union);
 
+        List<String> intercept = new ArrayList<>(cities);
+        intercept.retainAll(cities2);
+        System.out.println(intercept);
+
+        List<String> unique = new ArrayList<>(cities);
+        cities2.removeAll(unique);
+        System.out.println(cities2);
     }
 }

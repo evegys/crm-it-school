@@ -3,9 +3,12 @@ package kg.itschool.crm.dao.impl;
 import kg.itschool.crm.dao.CourseFormatDao;
 import kg.itschool.crm.dao.daoutil.Log;
 import kg.itschool.crm.model.CourseFormat;
+import kg.itschool.crm.model.Manager;
+import kg.itschool.crm.model.Mentor;
 
 import java.sql.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseFormatDaoImpl implements CourseFormatDao {
@@ -101,6 +104,7 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
         }
         return savedCourseFormat;
     }
+
     @Override
     public CourseFormat findById(Long id) {
 
@@ -146,6 +150,42 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
 
     @Override
     public List<CourseFormat> findAll() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        List<CourseFormat> courseFormats = new ArrayList<>();
+        List<Manager> managers = new ArrayList<>();
+        List<Mentor> mentors = new ArrayList<>();
+
+        try {
+            Log.info(this.getClass().getSimpleName() + " findAll()", Connection.class.getSimpleName(), "Establishing connection");
+            connection = getConnection();
+
+            String readQuery = "SELECT * FROM tb_mentors;";
+
+            preparedStatement = connection.prepareStatement(readQuery);
+
+            resultSet = preparedStatement.executeQuery();
+
+            for (int i = 0; i <= courseFormats.size() && resultSet.next(); i++) {
+                CourseFormat courseFormat = new CourseFormat();
+                courseFormat.setId(resultSet.getLong("id"));
+                courseFormat.setFormat(resultSet.getString("first_name"));
+                courseFormat.setLessonDuration(LocalTime.from(resultSet.getDate("dod").toLocalDate()));
+                courseFormat.setCourseDurationWeeks(resultSet.getInt(7));
+                courseFormat.setLessonsPerWeek(resultSet.getInt(6));
+                courseFormats.add(courseFormat);
+            }
+            return courseFormats;
+        } catch (Exception e) {
+            Log.error(this.getClass().getSimpleName(), e.getStackTrace()[0].getClassName(), e.getMessage());
+            e.printStackTrace();
+        } finally {
+            close(resultSet);
+            close(preparedStatement);
+            close(connection);
+        }
         return null;
     }
 }
