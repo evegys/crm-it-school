@@ -3,10 +3,13 @@ package kg.itschool.crm.dao.impl;
 import kg.itschool.crm.dao.CourseFormatDao;
 import kg.itschool.crm.dao.daoutil.Log;
 import kg.itschool.crm.model.CourseFormat;
+import kg.itschool.crm.model.Student;
 
 import java.sql.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CourseFormatDaoImpl implements CourseFormatDao {
 
@@ -47,7 +50,7 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
     }
 
     @Override
-    public CourseFormat save(CourseFormat courseFormat) {
+    public Optional<CourseFormat> save(CourseFormat courseFormat) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -91,6 +94,7 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
             savedCourseFormat.setOnline(resultSet.getBoolean("is_online"));
             savedCourseFormat.setDateCreated(resultSet.getTimestamp("date_created").toLocalDateTime());
 
+            return Optional.of(courseFormat);
         } catch (SQLException e) {
             Log.error(this.getClass().getSimpleName(), e.getStackTrace()[0].getClass().getSimpleName(), e.getMessage());
             e.printStackTrace();
@@ -99,11 +103,11 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
             close(preparedStatement);
             close(connection);
         }
-        return savedCourseFormat;
+        return Optional.empty();
     }
 
     @Override
-    public CourseFormat findById(Long id) {
+    public Optional<CourseFormat> findById(Long id) {
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -133,6 +137,7 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
             courseFormat.setOnline(resultSet.getBoolean("is_online"));
             courseFormat.setDateCreated(resultSet.getTimestamp("date_created").toLocalDateTime());
 
+            return Optional.of(courseFormat);
         } catch (SQLException e) {
             Log.error(this.getClass().getSimpleName(), e.getStackTrace()[0].getClass().getSimpleName(), e.getMessage());
             e.printStackTrace();
@@ -141,12 +146,89 @@ public class CourseFormatDaoImpl implements CourseFormatDao {
             close(preparedStatement);
             close(connection);
         }
-        return courseFormat;
+        return Optional.empty();
 
     }
 
     @Override
     public List<CourseFormat> findAll() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        List<CourseFormat> courseFormats = new ArrayList<>();
+
+        try {
+            Log.info(this.getClass().getSimpleName() + " findAll()", Connection.class.getSimpleName(), "Establishing connection");
+            connection = getConnection();
+
+            String readQuery = "SELECT * FROM tb_course_format;";
+
+            preparedStatement = connection.prepareStatement(readQuery);
+
+            resultSet = preparedStatement.executeQuery();
+            for (int i = 0; i <= courseFormats.size() && resultSet.next(); i++) {
+                CourseFormat courseFormat = new CourseFormat();
+                courseFormat.setId(resultSet.getLong("id"));
+                courseFormat.setFormat(resultSet.getString("course_format"));
+                courseFormat.setCourseDurationWeeks(resultSet.getInt("course_duration_weeks"));
+                courseFormat.setLessonDuration(LocalTime.parse(resultSet.getString("lesson_duration")));
+                courseFormat.setLessonsPerWeek(resultSet.getInt("lessons_per_week"));
+                courseFormat.setOnline(resultSet.getBoolean("is_online"));
+                courseFormat.setDateCreated(resultSet.getTimestamp("date_created").toLocalDateTime());
+
+            }
+            return courseFormats;
+        } catch (Exception e) {
+            Log.error(this.getClass().getSimpleName(), e.getStackTrace()[0].getClassName(), e.getMessage());
+            e.printStackTrace();
+        } finally {
+            close(resultSet);
+            close(preparedStatement);
+            close(connection);
+        }
         return null;
+
+    }
+
+    @Override
+    public List<CourseFormat> saveAll(List<CourseFormat> courseFormats) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Log.info(this.getClass().getSimpleName(), Connection.class.getSimpleName(), "Establishig connection");
+            connection = getConnection();
+
+
+            String insertQuery = "INSERT INTO tb_course_format(" +
+                    "course_format, course_duration_weeks, lesson_duration, lessons_per_week, is_online, date_created ) " +
+
+                    "VALUES(?, ?, ?, ?, ?, ?)";
+
+            for (int i = 0; i < courseFormats.size(); i++) {
+
+
+                preparedStatement = connection.prepareStatement(insertQuery);
+                preparedStatement.setString(1, String.valueOf(courseFormats.get(1)));
+                preparedStatement.setInt(2, courseFormats.get(2));
+                preparedStatement.setTime(3, Time.valueOf(String.valueOf((courseFormats.get(3)))));
+                preparedStatement.setInt(4, courseFormats.get(4));
+                preparedStatement.setBoolean(5, courseFormats.get(5));
+                preparedStatement.setTimestamp(6, Timestamp.valueOf(String.valueOf(courseFormats.get(6))));
+
+                preparedStatement.execute();
+
+            }
+            close(preparedStatement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(connection);
+        }
+
+        return null;
+
     }
 }
