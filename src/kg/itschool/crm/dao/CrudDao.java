@@ -13,9 +13,9 @@ public interface CrudDao<Model> {
     List<Model> findAll();
 
     default Connection getConnection() throws SQLException {
-        final String URL = "jdbc:postgresql://localhost:5432/crm";
-        final String USERNAME = "postgres";
-        final String PASSWORD = "'";
+        final String URL = "jdbc:postgresql://ec2-52-73-155-171.compute-1.amazonaws.com";
+        final String USERNAME = "voweidmihtnvqw";
+        final String PASSWORD = "4068bc9c7437dc12b9b08de55943a5a02642a16c8a487dc512f67408062b8643";
 
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
